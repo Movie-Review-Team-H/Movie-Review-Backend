@@ -2,25 +2,15 @@
 
 # 💎 기술 스택별 요구사항
 
----
-
-### 1. Kotlin + Springboot
+### Kotlin + Springboot
 
 - 빌드 도구는 gradle를 사용해주세요.
 - Spring data JPA를 사용해주세요.
 
-### 2. Ty**pescript + Nest.JS**
-
-- TypeORM을 사용해주세요.
-
 # 💡 도메인
-
----
 
 - Movie
 - Review
-
----
 
 # ⭐️ 기능
 
