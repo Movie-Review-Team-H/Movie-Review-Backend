@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import partners.partners.common.CustomApiResponse;
 import partners.partners.domain.movie.dto.request.AddMovieRequest;
 
-import partners.partners.domain.movie.repository.MovieRepository;
+import partners.partners.domain.movie.dto.request.FixMovieRequest;
 import partners.partners.domain.movie.service.MovieService;
 
 
@@ -31,11 +31,17 @@ public class MovieController {
         movieService.createMovie(addMovieRequest);
         return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess("영화 등록됌"));
     }
-    @Operation(summary = "영화 삭제",description = " 영화 소프트딜리트")
+    @Operation(summary = "영화 삭제",description = " 영화 소프트딜리트하기")
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomApiResponse<String>> deleteMovie(@PathVariable Long id) {
-        movieService.deleteMovie(id);
+        movieService.soft_deleteMovie(id);
         return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess("영화 삭제됌"));
+    }
+    @Operation(summary = "영화 수정",description = " 영화 수정하기")
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomApiResponse<String>> fixMovie(@PathVariable Long id, @RequestBody FixMovieRequest fixMovieRequest) {
+        movieService.updateMovie(id,fixMovieRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess("영화 수정함"));
     }
 
 
