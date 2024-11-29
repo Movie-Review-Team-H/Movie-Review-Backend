@@ -1,14 +1,16 @@
-package domain.movie.entity;
+package partners.partners.domain.movie.entity;
 
-import domain.movie.enums.Genre;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import partners.partners.domain.movie.enums.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+
 import java.time.LocalDateTime;
 
 import java.time.LocalDate;
@@ -18,8 +20,9 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE movie SET deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE  movie SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
+@Table(name = "movie")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +37,10 @@ public class Movie {
     @Column
     private LocalDate closeDate;
 
+
+
     @UpdateTimestamp
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private boolean isCurrentlyShowing;
@@ -45,6 +50,10 @@ public class Movie {
 
     @Enumerated(EnumType.STRING)
     private Genre genre;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)  // updatable = false로 설정하여 업데이트가 되지 않도록 함
+    private LocalDateTime createdAt;
 
 
 

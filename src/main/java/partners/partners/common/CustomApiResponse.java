@@ -1,4 +1,4 @@
-package common;
+package partners.partners.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
