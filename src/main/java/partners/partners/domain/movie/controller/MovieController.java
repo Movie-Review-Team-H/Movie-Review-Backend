@@ -31,6 +31,12 @@ public class MovieController {
         movieService.createMovie(addMovieRequest);
         return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess("영화 등록됌"));
     }
+    @Operation(summary = "영화 삭제",description = " 영화 소프트딜리트")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CustomApiResponse<String>> deleteMovie(@PathVariable Long id) {
+        movieService.deleteMovie(id);
+        return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess("영화 삭제됌"));
+    }
 
 
 
