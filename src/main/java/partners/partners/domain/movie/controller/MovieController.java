@@ -15,6 +15,8 @@ import partners.partners.domain.movie.dto.request.FixMovieRequest;
 import partners.partners.domain.movie.dto.response.MovieResponse;
 import partners.partners.domain.movie.service.MovieService;
 
+import java.util.List;
+
 
 @Tag(name = "Movie", description = "영화 관련 API")
 @RequestMapping("/movie")
@@ -49,5 +51,14 @@ public class MovieController {
     public ResponseEntity<CustomApiResponse<MovieResponse>> getMovie(@PathVariable Long id) {
         MovieResponse movieResponse = movieService.getMovieById(id);
         return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess(movieResponse));
+    }
+
+    @Operation(summary = "영화 목록 조회", description = "조건에 따라 영화 목록 조회하기") // swagger ui 적용
+    @GetMapping()
+    public ResponseEntity<CustomApiResponse<List<MovieResponse>>> getMovies(
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) Boolean isShowing) {
+        List<MovieResponse> movies = movieService.searchMovies(genre, isShowing);
+        return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess(movies));
     }
 }
