@@ -7,10 +7,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import partners.partners.domain.movie.dto.request.AddMovieRequest;
 import partners.partners.domain.movie.dto.request.FixMovieRequest;
+import partners.partners.domain.movie.dto.response.MovieResponse;
 import partners.partners.domain.movie.entity.Movie;
 import partners.partners.domain.movie.repository.MovieRepository;
+import partners.partners.exception.MovieNotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,13 +29,13 @@ public class MovieService {
     @Transactional
     public void soft_deleteMovie(Long id) {
         Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("영화가 없습니다."));
+                .orElseThrow(() -> new MovieNotFoundException("영화가 없습니다."));
         movieRepository.delete(movie);
     }
     @Transactional
     public void updateMovie(Long id, FixMovieRequest fixMovieRequest){
         Movie movie = movieRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new EntityNotFoundException("영화가 없습니다."));
+                .orElseThrow(() -> new MovieNotFoundException("영화가 없습니다."));
         Movie updatedMovie = Movie.builder()
                 .id(movie.getId()) // 기존 ID 유지
                 .title(fixMovieRequest.getTitle()) // 제목 수정
@@ -46,5 +50,32 @@ public class MovieService {
         movieRepository.save(updatedMovie);
     }
 
+    @Transactional
+    public MovieResponse getMovieById(Long id) {
+        Movie movie = movieRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new MovieNotFoundException("영화가 없습니다."));
+        return MovieResponse.fromEntity(movie);
+    }
 
+    @Transactional
+    public List<MovieResponse> searchMovies(String genre, Boolean isShowing) {
+        List<Movie> movies = movieRepository.findAllByIsDeletedFalse();
+
+        if (genre != null) {
+            movies = movies.stream()
+                    .filter(movie -> movie.getGenre().name().equalsIgnoreCase(genre))
+                    .collect(Collectors.toList());
+        }
+
+        if (isShowing != null) {
+            movies = movies.stream()
+                    .filter(movie -> movie.isCurrentlyShowing() == isShowing)
+                    .collect(Collectors.toList());
+        }
+
+        return movies.stream()
+                .sorted((m1, m2) -> m1.getOpenDate().compareTo(m2.getOpenDate()))
+                .map(MovieResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

@@ -22,4 +22,8 @@ public class CustomApiResponse<T> {
     public static <T> CustomApiResponse<T> onFailure(String message, String errorCode) {
         return new CustomApiResponse<>(false, message, null, errorCode);
     }
+
+    public static CustomApiResponse<String> onError(String message) {
+        return new CustomApiResponse<>(false, message, null, null);
+    }
 }
