@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import partners.partners.domain.movie.dto.request.AddMovieRequest;
 import partners.partners.domain.movie.dto.request.FixMovieRequest;
+import partners.partners.domain.movie.dto.response.MovieResponse;
 import partners.partners.domain.movie.entity.Movie;
 import partners.partners.domain.movie.repository.MovieRepository;
 
@@ -46,5 +47,10 @@ public class MovieService {
         movieRepository.save(updatedMovie);
     }
 
-
+    @Transactional
+    public MovieResponse getMovieById(Long id) {
+        Movie movie = movieRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new EntityNotFoundException("영화가 없습니다."));
+        return MovieResponse.fromEntity(movie);
+    }
 }

@@ -12,8 +12,8 @@ import partners.partners.common.CustomApiResponse;
 import partners.partners.domain.movie.dto.request.AddMovieRequest;
 
 import partners.partners.domain.movie.dto.request.FixMovieRequest;
+import partners.partners.domain.movie.dto.response.MovieResponse;
 import partners.partners.domain.movie.service.MovieService;
-
 
 
 @Tag(name = "Movie", description = "영화 관련 API")
@@ -44,6 +44,10 @@ public class MovieController {
         return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess("영화 수정함"));
     }
 
-
-
+    @Operation(summary = "영화 단일 조회", description = "영화 ID로 영화 조회하기")
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomApiResponse<MovieResponse>> getMovie(@PathVariable Long id) {
+        MovieResponse movieResponse = movieService.getMovieById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(CustomApiResponse.onSuccess(movieResponse));
+    }
 }
