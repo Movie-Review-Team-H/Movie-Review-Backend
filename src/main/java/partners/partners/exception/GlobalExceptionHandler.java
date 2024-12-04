@@ -15,4 +15,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(CustomApiResponse.onError(ex.getMessage()));
     }
+
+    // ReviewNotFoundException 처리
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<CustomApiResponse<String>> handleReviewNotFoundException(ReviewNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(CustomApiResponse.onError(ex.getMessage()));
+    }
 }
