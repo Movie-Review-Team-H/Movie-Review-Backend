@@ -3,6 +3,9 @@ package partners.partners.domain.review.service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import partners.partners.domain.movie.entity.Movie;
+import partners.partners.domain.movie.repository.MovieRepository;
+import partners.partners.domain.review.dto.request.ReviewAddRequest;
 import partners.partners.domain.review.dto.response.ReviewResponse;
 import partners.partners.domain.review.entity.Review;
 import partners.partners.domain.review.repository.ReviewRepository;
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final MovieRepository movieRepository;
 
     @Transactional
     public List<ReviewResponse> getReviewsByMovieId(Long movieId, Double minAverageRating) {
@@ -38,4 +42,12 @@ public class ReviewService {
                 .map(ReviewResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+    @Transactional
+    public void createReview(Long movieId, ReviewAddRequest reviewAddRequest) {
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new IllegalArgumentException("영화를 찾을 수 없습니다."));
+        Review review = reviewAddRequest.toEntity(movie);
+        reviewRepository.save(review);
+    }
+
 }

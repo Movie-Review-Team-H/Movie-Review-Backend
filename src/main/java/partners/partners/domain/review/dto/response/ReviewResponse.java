@@ -24,7 +24,7 @@ public class ReviewResponse {
     public static ReviewResponse fromEntity(Review review) {
         return ReviewResponse.builder()
                 .id(review.getId())
-                .movieId(review.getMovieId())
+                .movieId(review.getMovie().getId())
                 .reviewerName(review.getReviewerName())
                 .content(review.getContent())
                 .averageRating(review.getAverageRating())

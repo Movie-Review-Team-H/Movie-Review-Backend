@@ -37,8 +37,6 @@ public class Movie {
     @Column
     private LocalDate closeDate;
 
-
-
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

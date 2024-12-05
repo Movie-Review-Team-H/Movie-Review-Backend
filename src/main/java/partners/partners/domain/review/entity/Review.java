@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import partners.partners.domain.movie.entity.Movie;
 
 import java.time.LocalDateTime;
 
@@ -21,9 +22,6 @@ public class Review {
     private Long id;
 
     @Column(nullable = false)
-    private Long movieId;
-
-    @Column(nullable = false)
     private String reviewerName;
 
     @Column(nullable = false)
@@ -35,6 +33,10 @@ public class Review {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
+    private Movie movie;
 
 
 }
